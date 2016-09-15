@@ -1,0 +1,61 @@
+#+TITLE: Purescript layer
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/readtheorg.css" />
+
+[[file:img/purescript-logo.png]]
+
+* Table of Contents                                         :TOC_4_org:noexport:
+ - [[Description][Description]]
+ - [[Install][Install]]
+ - [[Key bindings][Key bindings]]
+   - [[Purescript][Purescript]]
+     - [[Imports][Imports]]
+     - [[psc-ide][psc-ide]]
+   - [[REPL][REPL]]
+
+* Description
+
+This layer provides basic Purescript editing support for spacemacs
+thanks to the following packages:
+- [[https://github.com/dysinger/purescript-mode][purescript-mode]]
+- [[https://github.com/ardumont/emacs-psci][psci]]
+- [[https://github.com/epost/psc-ide-emacs][psc-ide-emacs]]
+
+* Install
+To use this configuration layer, add it to your =~/.spacemacs=. You will need to
+add =purescript= to the existing =dotspacemacs-configuration-layers= list in this
+file.
+
+If you want to get autocompletions and type information you have to install [[https://github.com/kRITZCREEK/psc-ide][psc-ide]].
+
+* Key bindings
+
+** Purescript
+
+*** Imports
+
+| Key Binding | Description                                                   |
+|-------------+---------------------------------------------------------------|
+| ~SPC m i =~ | Format imports                                                |
+| ~SPC m i \~ | Return to where you were editing before navigating to imports |
+| ~SPC m i a~ | Align imports                                                 |
+| ~SPC m i n~ | Navigate to the imports                                       |
+
+*** psc-ide
+
+| Key Binding | Description                                             |
+|-------------+---------------------------------------------------------|
+| ~SPC m h t~ | Show type at point                                      |
+| ~SPC m m l~ | Load a module with its dependencies into psc-ide-server |
+| ~SPC m m s~ | Start psc-ide-server                                    |
+
+** REPL
+
+[[https://github.com/ardumont/emacs-psci][psci]] provides a very basic REPL for purescript. The following key
+bindings are available:
+
+| Key Binding | Description                                                                      |
+|-------------+----------------------------------------------------------------------------------|
+| ~SPC m s b~ | Equivalent of =:m /path/to/current/module/file.purs= - Load <file> for importing |
+| ~SPC m s i~ | Launch a psci console buffer                                                     |
+| ~SPC m s m~ | Equivalent of =:i your.current.module.name= - Import <module> for use in PSCI    |
+| ~SPC m s p~ | Load or reload files defined in the project file .psci                           |

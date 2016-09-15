@@ -1,0 +1,178 @@
+Set $mod Mod4
+
+#font -*-tewi-medium-*-*-*-11-*-*-*-*-*-*
+#set $ft xft:DroidSans:size=8
+#set $ft pango:Inconsolata:size=8
+#set $ft -xos4-terminesspowerline-medium-r-normal--12-120-72-72-c-60-iso10646-1
+font pango:Terminus 8
+set $ft terminus12
+
+gaps inner 15
+gaps outer 25
+smart_gaps on
+new_window pixel 4
+focus_follows_mouse  no
+
+#don't move to neighbouring screen with hjkl
+force_focus_wrapping yes
+
+#set $gray2 #8fa1b3
+#set $gray1 #c0c5ce
+#
+#client.focused            $gray1   $gray2   $gray1   $gray2
+#client.focused_inactive   $gray2   $gray1   $gray2   $gray1
+#client.unfocused          $gray2   $gray1   $gray2   $gray1
+#client.urgent             $gray1    $gray2  $gray1    $gray2
+
+# Hybrid colors
+set $back               #1d1F21
+set $black              #282A2E
+set $grey               #373B41
+set $lightgrey          #707880
+set $white              #C5C8C6
+set $yellow             #F0C674
+set $red                #CC6666
+set $darkred            #A54242
+set $green              #B5BD56
+
+#class                  border      backgr.     text        split
+client.focused          $green     $green       $black      $red
+client.focused_inactive $grey       $grey       $lightgrey  $grey
+client.unfocused        $grey       $grey       $lightgrey  $grey
+client.urgent           $red        $red        $black      $red
+client.background       $back
+
+
+# use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec terminator
+
+# kill focused window
+bindsym $mod+c kill
+
+# start rofi in run mode
+bindsym Mod4+p exec rofi -show run -lines 3 -eh 2 -width 100 -padding 400 -opacity "85" -bw 0 -bc "#2f343f" -bg "#2f343f" -fg "#f3f4f5" -hlbg "#2f343f" -hlfg "#9575cd" -font "System San Francisco Display 18"
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# split in horizontal orientation
+bindsym $mod+v split h
+
+# split in vertical orientation
+bindsym $mod+g split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# change container layout (tabbed, toggle split)
+bindsym $mod+n layout tabbed
+bindsym $mod+m layout toggle split
+
+# container navigation
+bindsym $mod+d focus parent
+bindsym $mod+b focus child
+
+# move container between displays
+bindsym $mod+semicolon move workspace to output right
+
+# toggle tiling / floating
+bindsym $mod+Shift+f floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# switch to last workspace
+bindsym $mod+6 workspace back_and_forth
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+
+bindsym $mod+z reload
+bindsym $mod+Shift+x restart
+bindsym $mod+Shift+z exit
+
+mode "resize" {
+        bindsym h   resize shrink width 10 px or 10 ppt
+        bindsym j   resize grow height 10 px or 10 ppt
+        bindsym k   resize shrink height 10 px or 10 ppt
+        bindsym l   resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or q or ^[
+        bindsym Return mode "default"
+        bindsym q mode "default"
+        bindsym Escape mode "default"
+        bindcode Control+34 mode "default"
+}
+
+bindsym $mod+s mode "resize"
+
+mode "Gaps" {
+     bindsym plus gaps inner current plus 5
+     bindsym minus gaps inner current minus 5
+     bindsym 0 gaps inner current set 25
+     bindsym 9 gaps outer current plus 5
+     bindsym 8 gaps outer current minus 5
+     bindsym 7 gaps outer current set 15
+     bindsym 6 gaps inner current set 0
+     bindsym 5 gaps outer current set 0
+
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
+}
+
+bindsym $mod+Shift+g mode "Gaps"
+
+# My bar
+bar {
+  i3bar_command ~/.i3/lemonbar/i3_lemonbar.sh
+}
+
+# multimedia keys
+bindsym XF86AudioRaiseVolume exec "amixer -D pulse sset Master '3%+'"
+bindsym XF86AudioLowerVolume exec "amixer -D pulse sset Master '1%-'"
+bindsym XF86AudioMute exec "amixer -D pulse set Master toggle"
+bindsym XF86AudioMicMute exec "amixer -D pulse sset Capture toggle"
+
+bindsym XF86AudioPlay exec "mpc toggle"
+bindsym XF86AudioStop exec "mpc stop"
+bindsym XF86AudioNext exec "mpc next"
+bindsym XF86AudioPrev exec "mpc prev"
+
+bindsym XF86KbdBrightnessDown exec "sudo /opt/kbdlight/bin/kbdlight -"
+bindsym XF86KbdBrightnessUp exec "sudo /opt/kbdlight/bin/kbdlight +"
+bindsym XF86TouchpadToggle exec "synclient TouchpadOff=$(synclient | awk '/TouchpadOff/ {print ($3+1)%2}')"
+
+bindsym XF86Display exec "arandr"
+
+bindsym $mod+a exec "urxvt -e alsamixer"
+bindsym $mod+Shift+a exec "pavucontrol"
+
+bindsym $mod+Shift+d exec "killall ffmpeg"
+
+
+exec xset fp+ $HOME/.fonts/misc
+exec xset fp+ $HOME/.fonts/ohsnap
+exec xset fp+ $HOME/.fonts/terminesspowerline 
+exec_always compton -b
+exec_always hsetroot -fill /home/jordy/Pictures/Fault.jpg

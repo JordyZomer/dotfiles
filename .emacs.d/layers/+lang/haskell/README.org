@@ -1,0 +1,409 @@
+#+TITLE: Haskell layer
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/readtheorg.css" />
+
+[[file:img/haskell.png]]
+
+* Table of Contents                                         :TOC_4_org:noexport:
+ - [[Description][Description]]
+   - [[Features:][Features:]]
+ - [[Install][Install]]
+   - [[Layer][Layer]]
+   - [[Dependencies][Dependencies]]
+   - [[Setup PATH][Setup PATH]]
+   - [[ghc-mod support][ghc-mod support]]
+     - [[Stack users][Stack users]]
+   - [[Optional extras][Optional extras]]
+     - [[GHCi-ng support][GHCi-ng support]]
+       - [[Stack users][Stack users]]
+       - [[ghc-mod users][ghc-mod users]]
+     - [[structured-haskell-mode][structured-haskell-mode]]
+     - [[hindent][hindent]]
+ - [[Key bindings][Key bindings]]
+   - [[Documentation][Documentation]]
+   - [[Debug][Debug]]
+   - [[REPL][REPL]]
+   - [[Cabal commands][Cabal commands]]
+   - [[Cabal files][Cabal files]]
+   - [[Ghc-mod][Ghc-mod]]
+     - [[insert template][insert template]]
+ - [[FAQ][FAQ]]
+   - [[REPL doesn't work][REPL doesn't work]]
+   - [[REPL is stuck][REPL is stuck]]
+   - [[I am using =stack= and =ghc-mod=, but =ghc-mod= doesn't work][I am using =stack= and =ghc-mod=, but =ghc-mod= doesn't work]]
+   - [[Indentation doesn't reset when pressing return after empty line][Indentation doesn't reset when pressing return after empty line]]
+
+* Description
+This layer adds support for the [[https://www.haskell.org/][Haskell]] language.
+
+** Features:
+- syntax highlighting for [[https://github.com/haskell/haskell-mode][haskell source]], [[https://github.com/haskell/haskell-mode][cabal files]], [[https://github.com/bgamari/cmm-mode][C-- source]],
+- auto-completion with [[https://github.com/iquiw/company-ghc][company-ghc]].
+
+*This layer is in construction, it needs your contributions and bug reports.*
+
+* Install
+** Layer
+To use this configuration layer, add it to your =~/.spacemacs=. You will need to
+add =haskell= to the existing =dotspacemacs-configuration-layers= list in this
+file.
+
+** Dependencies
+This layer requires some [[https://www.haskell.org/cabal/][cabal]] packages:
+- =hlint=
+- =stylish-haskell=
+- =hasktags=
+- =ghc-mod=
+
+To install them, use following command (or the =stack= equivalent):
+
+#+BEGIN_SRC sh
+$ cabal install stylish-haskell hlint hasktags ghc-mod
+#+END_SRC
+
+** Setup PATH
+First of all make sure that your =$PATH= contains the installation path for
+Haskell tools like =ghc=, =ghci= etc. It depends on how you have installed
+=ghc=, but you can always check it by running =which ghc= in your terminal.
+=Stack= users should add only the installation path of =stack= itself. Usually
+it's =~/.local/bin=.
+
+Then make sure that your =$PATH= contains the installation path for =cabal=
+packages. If you are using =cabal= it should be =~/.cabal/bin= or
+=~/Library/Haskell/bin= (for 'Haskell for Mac' users). If you
+are using =stack= then it should be =~/.local/bin=.
+
+For information about setting up =$PATH=, check out the corresponding section in
+the FAQ (~SPC h SPC $PATH RET~).
+
+** ghc-mod support
+[[http://www.mew.org/~kazu/proj/ghc-mod/][ghc-mod]] enhances =haskell-mode= with for example code completion, templates,
+case-splitting and much more. In order to use it you need to install the
+executable with =cabal install ghc-mod= (or =stack= equivalent). Note that
+=ghc-mod= support is enabled by default, so if you want to disable it, you must
+do it explicitly in your =.spacemacs= file.
+
+#+BEGIN_SRC emacs-lisp
+(setq-default dotspacemacs-configuration-layers
+  '((haskell :variables haskell-enable-ghc-mod-support nil)))
+#+END_SRC
+
+=Stack= users also should make sure that =dist/setup-config= doesn't exist in
+the project root. As it will confuse =ghc-mod=. For more troubleshooting,
+checkout this [[https://github.com/kazu-yamamoto/ghc-mod/wiki#known-issues-related-to-stack][document]].
+
+*** Stack users
+
+Time to time =ghc-mod= is not available via latest Stackage LTS version. So if
+you have problems with calling =stack install ghc-mod=, try to use =stack
+install ghc-mod --resolver lts-3.1= (the last known LTS version that had
+=ghc-mod=). But even if it doesn't work, don't panic, it's easy to install it
+from sources.
+
+#+BEGIN_SRC sh
+# clone cabal-helper
+$ git clone https://github.com/DanielG/cabal-helper.git
+# cd into cloned repository
+$ cd cabal-helper
+# init stack, so cabal-helper can be installed using stack
+$ stack init
+# now install it
+$ stack install
+# go back where you was
+$ cd ..
+# and remove cabal-helper repository since you don't need it
+$ rm -rf cabal-helper
+# now clone ghc-mod
+$ git clone https://github.com/kazu-yamamoto/ghc-mod.git
+# and cd into it
+$ cd ghc-mod
+# again, let's init stack
+$ stack init
+# now install it
+$ stack install
+# go back
+$ cd ..
+# and remove ghc-mod since you don't need it
+$ rm -rf ghc-mod
+#+END_SRC
+
+** Optional extras
+The Haskell layer supports some extra features that can be enabled through
+layer variables.
+
+*** GHCi-ng support
+[[https://github.com/chrisdone/ghci-ng][ghci-ng]] adds some nice features to =haskell-mode=, and is supported in
+Spacemacs by a layer variable:
+
+Follow the instructions to install [[https://github.com/chrisdone/ghci-ng][ghci-ng]] (remember to add =:set +c=
+in =~/.ghci=), next set the layer variable:
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default dotspacemacs-configuration-layers
+    '((haskell :variables haskell-enable-ghci-ng-support t)))
+#+END_SRC
+
+Once ghci-ng is enabled, two of the old keybindings are overriden with
+improved versions from ghci-ng, and a new keybinding available:
+
+| Key Binding | Description                                                               |
+|-------------+---------------------------------------------------------------------------|
+| ~SPC m h t~ | gets the type of the identifier under the cursor or for the active region |
+| ~SPC m g g~ | go to definition                                                          |
+| ~SPC m u~   | finds uses of identifier                                                  |
+
+**** Stack users
+
+=Stack= and =ghci-ng= doesn't play well with each other, so the general advice
+is to avoid mixing them. But, if you want mix them anyway, you'll need to set
+=haskell-process-type= explicitly:
+
+#+BEGIN_SRC emacs-lisp
+(setq-default dotspacemacs-configuration-layers
+  '((haskell :variables haskell-process-type 'ghci)))
+;; or
+(setq-default dotspacemacs-configuration-layers
+  '((haskell :variables haskell-process-type cabal-repl)))
+#+END_SRC
+
+This is needed, because by default =haskell-process-type= is set to =auto= and
+if you have =stack.yaml= file in the root of your project, =stack-ghci= will be
+used as process type.
+
+**** ghc-mod users
+
+If you want to use ~SPC m h t~ from =ghc-mod= instead of =ghci-ng= - then you
+need to add following line in your =dotspacemacs/user-config=:
+
+#+BEGIN_SRC emacs-lisp
+(spacemacs/set-leader-keys-for-major-mode 'haskell-mode
+        "mht"  'ghc-show-type)
+#+END_SRC
+
+This might be useful, because =ghc-mod= doesn't require active REPL in order to
+get type of symbol.
+
+*** structured-haskell-mode
+[[https://github.com/chrisdone/structured-haskell-mode][structured-haskell-mode]], or shm, replaces default haskell-mode
+auto-indentation and adds some nice functionalities.
+
+To install =shm= run =cabal install structured-haskell-mode= (or =stack=
+equivalent).
+
+To enable =shm= set the layer variable:
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default dotspacemacs-configuration-layers
+    '((haskell :variables haskell-enable-shm-support t)))
+#+END_SRC
+
+After shm has been enabled, some of the evil normal state bindings are overridden:
+
+| Key Binding | Description         |
+|-------------+---------------------|
+| ~D~         | =shm/kill-line=     |
+| ~R~         | =shm/raise=         |
+| ~P~         | =shm/yank=          |
+| ~(~         | =shm/forward-node=  |
+| ~)~         | =shm/backward-node= |
+
+For a nice visualization of these functions, please refer to the github page
+for [[https://github.com/chrisdone/structured-haskell-mode#features][structured-haskell-mode]].
+
+*Warning* structured-haskell-mode doesn't play very well with =evil=
+([[https://github.com/chrisdone/structured-haskell-mode/issues/81][structured-haskell-mode/#81]]). So it's better to be used with =emacs= edit
+style.
+
+*** hindent
+[[https://github.com/chrisdone/hindent][hindent]] is an extensible Haskell pretty printer, which let's you
+reformat your code. You need to install the executable with =cabal
+install hindent= or =stack install hindent=
+
+To enable it you have to set the variable =haskell-enable-hindent-style=
+to a supported style. The available styles are:
+- fundamental
+- johan-tibell
+- chris-done
+- gibiansky
+
+See examples [[https://github.com/chrisdone/hindent#example][here]]
+
+#+BEGIN_SRC emacs-lisp
+(setq-default dotspacemacs-configuration-layers
+  '((haskell :variables haskell-enable-hindent-style "johan-tibell")))
+#+END_SRC
+
+* Key bindings
+All Haskell specific bindings are prefixed with the major-mode leader
+~SPC m~.
+
+Top-level commands are prefixed by ~SPC m~:
+
+| Key Binding | Description                                                         |
+|-------------+---------------------------------------------------------------------|
+| ~SPC m g g~ | go to definition or tag                                             |
+| ~SPC m g i~ | cycle the Haskell import lines or return to point (with prefix arg) |
+| ~SPC m f~   | format buffer using haskell-stylish                                 |
+| ~SPC m F~   | format declaration using hindent (if enabled)                       |
+
+** Documentation
+Documentation commands are prefixed by ~SPC m h~
+
+| Key Binding | Description                                                                |
+|-------------+----------------------------------------------------------------------------|
+| ~SPC m h d~ | find or generate Haddock documentation for the identifier under the cursor |
+| ~SPC m h h~ | do a Hoogle lookup                                                         |
+| ~SPC m h H~ | do a local Hoogle lookup                                                   |
+| ~SPC m h i~ | gets information for the identifier under the cursor                       |
+| ~SPC m h t~ | gets the type of the identifier under the cursor                           |
+| ~SPC m h y~ | do a Hayoo lookup                                                          |
+
+** Debug
+Debug commands are prefixed by ~SPC m d~:
+
+| Key Binding | Description                                |
+|-------------+--------------------------------------------|
+| ~SPC m d d~ | start debug process, needs to be run first |
+| ~SPC m d b~ | insert breakpoint at function              |
+| ~SPC m d n~ | next breakpoint                            |
+| ~SPC m d N~ | previous breakpoint                        |
+| ~SPC m d B~ | delete breakpoint                          |
+| ~SPC m d c~ | continue current process                   |
+| ~SPC m d a~ | abandon current process                    |
+| ~SPC m d r~ | refresh process buffer                     |
+
+** REPL
+REPL commands are prefixed by ~SPC m s~:
+
+| Key Binding | Description                                     |
+|-------------+-------------------------------------------------|
+| ~SPC m s b~ | load or reload the current buffer into the REPL |
+| ~SPC m s c~ | clear the REPL                                  |
+| ~SPC m s s~ | show the REPL without switching to it           |
+| ~SPC m s S~ | show and switch to the REPL                     |
+
+** Cabal commands
+Cabal commands are prefixed by ~SPC m c~:
+
+| Key Binding | Description                                                |
+|-------------+------------------------------------------------------------|
+| ~SPC m c a~ | cabal actions                                              |
+| ~SPC m c b~ | build the current cabal project, i.e. invoke =cabal build= |
+| ~SPC m c c~ | compile the current project, i.e. invoke =ghc=             |
+| ~SPC m c v~ | visit the cabal file                                       |
+
+** Cabal files
+This commands are available in a cabal file.
+
+| Key Binding | Description                                 |
+|-------------+---------------------------------------------|
+| ~SPC m d~   | add a dependency to the project             |
+| ~SPC m b~   | go to benchmark section                     |
+| ~SPC m e~   | go to executable section                    |
+| ~SPC m t~   | go to test-suite section                    |
+| ~SPC m m~   | go to exposed modules                       |
+| ~SPC m l~   | go to libary section                        |
+| ~SPC m n~   | go to next subsection                       |
+| ~SPC m p~   | go to previous subsection                   |
+| ~SPC m s c~ | clear the REPL                              |
+| ~SPC m s s~ | show the REPL without switching to it       |
+| ~SPC m s S~ | show and switch to the REPL                 |
+| ~SPC m N~   | go to next section                          |
+| ~SPC m P~   | go to previous section                      |
+| ~SPC m f~   | find or create source-file under the cursor |
+
+** Ghc-mod
+These commands are only available when ghc-mod is enabled.
+
+For more info, see
+http://www.mew.org/~kazu/proj/ghc-mod/en/emacs.html
+
+ghc-mod commands are prefixed by ~SPC m m~:
+
+| Key Binding | Description                               |
+|-------------+-------------------------------------------|
+| ~SPC m m t~ | insert template                           |
+| ~SPC m m u~ | insert template with holes                |
+| ~SPC m m a~ | select one of possible cases (~ghc-auto~) |
+| ~SPC m m f~ | replace a hole (~ghc-refine~)             |
+| ~SPC m m e~ | expand template haskell                   |
+| ~SPC m m n~ | go to next type hole                      |
+| ~SPC m m p~ | go to previous type hole                  |
+| ~SPC m m >~ | make indent deeper                        |
+| ~SPC m m <~ | make indent shallower                     |
+
+*** insert template
+~SPC m m t~ inserts a template. What this means is that
+In the beginning of a buffer, "module Foo where" is
+inserted. On the function without signature, inferred
+type is inserted. On a symbol "foo" without definition,
+"foo = undefined" is inserted or a proper module is imported.
+~SPC m m u~ inserts a hole in this case. On a variable,
+the case is split. When checking with hlint, original code
+is replaced with hlint's suggestion if possible.
+
+* FAQ
+** REPL doesn't work
+Usually =haskell-mode= is great at figuring out which interactive process to
+bring up. But if you are experiencing problems with it you can help
+=haskell-mode= by setting =haskell-process-type= as in following code:
+
+#+BEGIN_SRC emacs-lisp
+(setq-default dotspacemacs-configuration-layers
+  '((haskell :variables haskell-process-type 'stack-ghci)))
+#+END_SRC
+
+Available options are:
+
+- ghci
+- cabal-repl
+- cabal-dev
+- cabal-ghci
+- stack-ghci
+
+** REPL is stuck
+Make sure that when you are typing anything in REPL there is a space between
+what you type and =λ>=. When there is no space - REPL will behave as it's stuck.
+Usually, when you enter normal state, cursor is moved back, so there is no
+required space when you switch to insert mode. There is possible workaround -
+just add following snippet to your =dotspacemacs/user-config= function:
+
+#+BEGIN_SRC emacs-lisp
+(when (configuration-layer/layer-usedp 'haskell)
+  (add-hook 'haskell-interactive-mode-hook
+            (lambda ()
+              (setq-local evil-move-cursor-back nil))))
+#+END_SRC
+
+It will make cursor stay at the right place in the REPL buffer when you enter
+normal state. Which in most cases helps you to avoid the problem with 'stuck'
+REPL.
+
+Also, some users might want to start REPL in insert mode. For this to happen you
+could place following snippet in your =dotspacemacs/user-config= function:
+
+#+BEGIN_SRC emacs-lisp
+(when (configuration-layer/layer-usedp 'haskell)
+    (defadvice haskell-interactive-switch (after spacemacs/haskell-interactive-switch-advice activate)
+      (when (eq dotspacemacs-editing-style 'vim)
+        (call-interactively 'evil-insert))))
+#+END_SRC
+
+** I am using =stack= and =ghc-mod=, but =ghc-mod= doesn't work
+Make sure that =dist= directory doesn't exist in your project root. So if it
+exists, just remove it and try again.
+
+** Indentation doesn't reset when pressing return after empty line
+
+This is intended behavior in =haskell-indentation-mode=. If you want to reset indentation when pressing return after empty line, add following snippet into your =dotspacemacs/user-config= function.
+
+#+BEGIN_SRC emacs-lisp
+(defun haskell-indentation-advice ()
+  (when (and (< 1 (line-number-at-pos))
+             (save-excursion
+               (forward-line -1)
+               (string= "" (s-trim (buffer-substring (line-beginning-position) (line-end-position))))))
+    (delete-region (line-beginning-position) (point))))
+
+(advice-add 'haskell-indentation-newline-and-indent
+            :after 'haskell-indentation-advice)
+#+END_SRC

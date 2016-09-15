@@ -1,0 +1,23 @@
+#+TITLE: Saltstack layer
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/readtheorg.css" />
+
+[[file:img/saltstack.png]]
+
+* Table of Contents                                         :TOC_4_org:noexport:
+ - [[Description][Description]]
+ - [[Install][Install]]
+ - [[Key bindings][Key bindings]]
+
+* Description
+This layer provides syntax highlighting for Saltstack files.
+
+* Install
+To use this configuration layer, add it to your =~/.spacemacs=. You will need to
+add =Saltstack= to the existing =dotspacemacs-configuration-layers= list in this
+file.
+
+* Key bindings
+
+| Key Binding | Description                                  |
+|-------------+----------------------------------------------|
+| ~SPC m p b~ | mmm-mode parse buffer via =mmm-parse-buffer= |

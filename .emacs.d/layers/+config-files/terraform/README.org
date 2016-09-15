@@ -1,0 +1,18 @@
+#+TITLE: Terraform layer
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/readtheorg.css" />
+
+[[file:img/terraform.png]]
+
+
+* Table of Contents                                         :TOC_4_org:noexport:
+ - [[Description][Description]]
+ - [[Install][Install]]
+
+* Description
+This layer provides syntax support for Terraform `.tf` files using
+[terraform-mode](https://github.com/syohex/emacs-terraform-mode).
+
+* Install
+To use this configuration layer, add it to your =~/.spacemacs=. You will need to
+add =terraform= to the existing =dotspacemacs-configuration-layers= list in this
+file.

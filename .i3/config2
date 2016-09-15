@@ -1,0 +1,216 @@
+# i3 config file (v4.8)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+# 22 jul 2015 - E7
+
+#.......
+# Font
+#.......
+
+#set $ft xft:DroidSans:size=8
+#set $ft pango:Inconsolata:size=8
+#set $ft -xos4-terminesspowerline-medium-r-normal--12-120-72-72-c-60-iso10646-1
+font pango:Terminus 8
+set $ft terminus12
+#font $ft
+
+#..........
+# Look
+#..........
+
+new_window pixel 2
+new_float pixel 2
+
+# Hybrid colors
+set $back               #1d1F21
+set $black              #282A2E
+set $grey               #373B41
+set $lightgrey          #707880
+set $white              #C5C8C6
+set $yellow             #F0C674
+set $red                #CC6666
+set $darkred            #A54242
+set $green              #B5BD56
+
+#class                  border      backgr.     text        split
+client.focused          $green     $green       $black      $red
+client.focused_inactive $grey       $grey       $lightgrey  $grey
+client.unfocused        $grey       $grey       $lightgrey  $grey
+client.urgent           $red        $red        $black      $red
+client.background       $back
+
+#..........
+# Applications
+#..........
+
+# Using bindcode for compatibility
+
+# Principal mod key (Super = Win key)
+# mod1 = Alt (xmodmap to show)
+# mod4 = Winkey (xmodmap to show)
+set $mod Mod4
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Terminal (mod+Enter)
+bindcode $mod+36 exec urxvt
+# GTK Theme sector (mod+winkey+a)
+bindcode $mod+Mod1+38 exec lxappearance 
+# Color picker (mod+winkey+g)
+bindcode $mod+Mod1+42 exec gcolor2
+# htop (mod+winkey+h)
+bindcode $mod+Mod1+43 exec ~/.i3/i3_focus_or_run.sh -t htop ~/bin/terminal htop
+# weechat (mod+winkey+i)
+bindcode $mod+Mod1+31 exec ~/.i3/i3_focus_or_run.sh -t weechat ~/bin/terminal weechat
+# iceweasel (mod+winkey+m)
+bindcode $mod+Mod1+58 exec ~/.i3/i3_focus_or_run.sh -c iceweasel iceweasel
+# virtualbox (mod+winkey+v)
+bindcode $mod+Mod1+55 exec ~/.i3/i3_focus_or_run.sh -c VirtualBox VirtualBox
+# mldonky (mod+winkey+t)
+bindcode $mod+Mod1+28 exec ~/.i3/i3_focus_or_run.sh -t mldonkey ~/bin/terminal mldonkey
+# start dmenu (mod+x)
+bindcode $mod+53 exec dmenu_run -fn "$ft" -nb "$back" -nf "$white" -sb "$yellow" -sf "$black"
+
+# Media keys
+# En Manzanita ya lo hace solo el pbbuttons
+#bindcode 123 exec --no-startud-id "amixer sset Master 5%+"
+#bindcode 122 exec --no-startud-id "amixer sset Master 5%-"
+#bindcode 121 exec --no-startud-id "amixer -q sset Master toggle"
+#bindcode XF86AudioPlay exec ncmpcpp toggle
+#bindcode XF86AudioStop exec ncmpcpp stop
+#bindcode XF86AudioPrev exec ncmpcpp prev
+#bindcode XF86AudioNext exec ncmpcpp next
+
+#assign application to workspace
+assign [class="Iceweasel"] 2:www
+assign [class="(i)VirtualBox"] 3:vbox
+assign [instance="(?i)TeamViewer.exe"] 4:vnc
+#assign [class="Firefox"] → 2
+#assign [class="Google-chrome"] → 2
+#assign [class="vlc"] → 4
+#assign [class="xv/mplayer"] → 4
+#assign [class="Gimp"] → 3
+#assign [class="Zathura"] → 5
+
+# Layout
+for_window [class="(?i)feh"] floating enable
+for_window [class="(?i)gcolor2"] floating enable
+for_window [class="(?i)gbdfed"] floating enable
+for_window [class="(?i)lxappearance"] floating enable
+for_window [instance="(?i)TeamViewer.exe"] floating enable
+for_window [class="(?i)VirtualBox"] floating enable
+for_window [class="(?i)mplayer2"] floating enable
+for_window [instance="(?i)mplayer2"] floating enable
+
+#...........
+# Keybinds i3
+#...........
+
+# kill focused window (mod+q)
+bindcode $mod+24 kill
+
+# Cursor key for focus
+bindcode $mod+113 focus left
+bindcode $mod+116 focus down
+bindcode $mod+111 focus up
+bindcode $mod+114 focus right
+
+# Shitf+cursor for move windows
+bindcode $mod+Shift+113 move left
+bindcode $mod+Shift+116 move down
+bindcode $mod+Shift+111 move up
+bindcode $mod+Shift+114 move right
+
+# split in horizontal orientation (mod+h)
+bindcode $mod+43 split h
+bindcode $mod+Mod1+113 split h
+bindcode $mod+Mod1+114 split h
+
+# split in vertical orientation (mod+v)
+bindcode $mod+55 split v
+bindcode $mod+Mod1+116 split v
+bindcode $mod+Mod1+111 split v
+
+# enter fullscreen mode for the focused container (mod+f)
+bindcode $mod+41 fullscreen
+
+# change container layout (stacked (mod+s), tabbed (mod+t), default(mod+e))
+bindcode $mod+39 layout stacking
+bindcode $mod+28 layout tabbed
+bindcode $mod+40 layout default
+bindcode $mod+25 layout toggle split
+
+# toggle tiling / floating (mod+shitf+space)
+bindcode $mod+Shift+65 floating toggle
+bindcode $mod+Mod1+65 floating toggle
+
+# change focus between tiling / floating windows (mod+space)
+bindcode $mod+65 focus mode_toggle
+
+# focus the parent container (mod+a)
+bindcode $mod+38 focus parent
+
+# focus the child container (mod+z)
+bindcode $mod+52 focus child
+
+# switch to workspace
+bindcode $mod+10 workspace 1:term
+bindcode $mod+11 workspace 2:www
+bindcode $mod+12 workspace 3:vbox
+bindcode $mod+13 workspace 4:vnc
+bindcode $mod+14 workspace 5:doc
+bindcode $mod+15 workspace 6:img
+bindcode $mod+16 workspace 7:misc
+bindcode $mod+17 workspace 8
+bindcode $mod+18 workspace 9
+bindcode $mod+19 workspace 10
+
+# move focused container to workspace
+bindcode $mod+Shift+10 move container to workspace 1:term
+bindcode $mod+Shift+11 move container to workspace 2:www
+bindcode $mod+Shift+12 move container to workspace 3:vbox
+bindcode $mod+Shift+13 move container to workspace 4:vnc
+bindcode $mod+Shift+14 move container to workspace 5:doc
+bindcode $mod+Shift+15 move container to workspace 6:img
+bindcode $mod+Shift+16 move container to workspace 7:misc
+bindcode $mod+Shift+17 move container to workspace 8
+bindcode $mod+Shift+18 move container to workspace 9
+bindcode $mod+Shift+19 move container to workspace 10
+
+# reload the configuration file (mod+shitf+c)
+bindcode $mod+Shift+54 reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3) (mod+shitf+r)
+bindcode $mod+Shift+27 restart
+# exit i3 (logs you out of your X session) (mod+shitf+e)
+#bindcode $mod+Shift+26 exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# resize window (you can also use the mouse for that) (mod+r)
+mode "resize" {
+  # These bindings trigger as soon as you enter the resize mode
+
+  # Pressing left will shrink the window’s width.
+  # Pressing right will grow the window’s width.
+  # Pressing up will shrink the window’s height.
+  # Pressing down will grow the window’s height.
+  bindcode 44 resize shrink width 10 px or 10 ppt
+  bindcode 45 resize grow height 10 px or 10 ppt
+  bindcode 46 resize shrink height 10 px or 10 ppt
+  bindcode 47 resize grow width 10 px or 10 ppt
+
+  # same bindings, but for the arrow keys
+  bindcode 113 resize shrink width 1 px or 1 ppt
+  bindcode 116 resize grow height 1 px or 1 ppt
+  bindcode 111 resize shrink height 1 px or 1 ppt
+  bindcode 114 resize grow width 1 px or 1 ppt
+
+  # back to normal: Enter or Escape
+  bindcode 36 mode "default"
+  bindcode 9 mode "default"
+}
+bindcode $mod+27 mode "resize"
+
+# My bar
+bar {
+  i3bar_command ~/.i3/lemonbar/i3_lemonbar.sh
+}

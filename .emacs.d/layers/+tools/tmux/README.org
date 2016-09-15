@@ -1,0 +1,11 @@
+#+TITLE: Tmux layer
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/readtheorg.css" />
+
+* Table of Contents                                         :TOC_4_org:noexport:
+ - [[What is this][What is this]]
+
+* What is this
+This is an extension to support [[https://github.com/Keithbsmiley/evil-tmux-navigator][evil-tmux-navigator]]. It requires a little
+configuration for tmux, so check the upstream documentation.
+
+

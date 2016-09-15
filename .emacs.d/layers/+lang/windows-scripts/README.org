@@ -1,0 +1,40 @@
+#+TITLE: Windows Scripting layer
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../../../css/readtheorg.css" />
+
+[[file:img/ps.png]]
+
+* Table of Contents                                         :TOC_4_org:noexport:
+ - [[Description][Description]]
+ - [[Install][Install]]
+ - [[Key Bindings][Key Bindings]]
+   - [[Powershell][Powershell]]
+   - [[Batch (dos.el)][Batch (dos.el)]]
+
+* Description
+This simple layer adds support for the Powershell scripting language as well
+as support for batch files.
+
+Incuded packages for extensions:
+- =.ps1=: [[https://github.com/jschaf/powershell.el][powershell]]
+- =.bat=: [[http://www.emacswiki.org/emacs/dos.el][dos.el]]
+
+* Install
+To use this configuration layer, add it to your =~/.spacemacs=. You will need to
+add =windows-scripts= to the existing =dotspacemacs-configuration-layers= list in this
+file.
+
+* Key Bindings
+** Powershell
+No useful bindings.
+
+** Batch (dos.el)
+
+| Key Binding | Description                          |
+|-------------+--------------------------------------|
+| ~SPC m D~   | ask for a command and display help   |
+| ~SPC m e b~ | evaluate buffer                      |
+| ~SPC m e B~ | evaluate buffer with args            |
+| ~SPC m s~   | insert separator =&=                 |
+| ~SPC m t~   | mini snippet to start a batch script |
+| ~SPC m T~   | big snippet to start a batch script  |
+| ~SPC m z~   | toggle outline                       |
